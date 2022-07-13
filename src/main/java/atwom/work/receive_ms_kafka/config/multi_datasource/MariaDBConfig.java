@@ -22,29 +22,31 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "mariaDBEntityManagerFactory", basePackages = {
-		"atwom.work.receive_ms_kafka.connect_db.mariadb.repository" }, transactionManagerRef = "mariaDBTransactionManager")
+        "atwom.work.receive_ms_kafka.connect_db.mariadb.repository"}, transactionManagerRef = "mariaDBTransactionManager")
 public class MariaDBConfig {
-	@Primary
-	@Bean(name = "mariaDBDatasource")
-	@ConfigurationProperties(prefix = "spring.datasource.mariadb")
-	public DataSource dataSource() {
-		return DataSourceBuilder.create().build();
-	}
+    @Primary
+    @Bean(name = "mariaDBDatasource")
+    @ConfigurationProperties(prefix = "spring.datasource.mariadb")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
+    }
 
-	@Primary
-	@Bean(name = "mariaDBEntityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(EntityManagerFactoryBuilder builder,
-			@Qualifier("mariaDBDatasource") DataSource dataSource) {
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
-		return builder.dataSource(dataSource).packages("atwom.work.receive_ms_kafka.connect_db.mariadb.entity")
-				.persistenceUnit("User").build();
-	}
+    @Primary
+    @Bean(name = "mariaDBEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(EntityManagerFactoryBuilder builder,
+                                                                           @Qualifier("mariaDBDatasource") DataSource dataSource) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
+        return builder.dataSource(dataSource).packages("atwom.work.receive_ms_kafka.connect_db.mariadb.entity")
+                .build();
+    }
 
-	@Primary
-	@Bean(name = "mariaDBTransactionManager")
-	public PlatformTransactionManager transactionManager(
-			@Qualifier("mariaDBEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-		return new JpaTransactionManager(entityManagerFactory);
-	}
+    @Primary
+    @Bean(name = "mariaDBTransactionManager")
+    public PlatformTransactionManager transactionManager(
+            @Qualifier("mariaDBEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
+
+
 }

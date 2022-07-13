@@ -17,8 +17,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-	@Id
-	private Long Id;
-	@Column(name = "username")
-	private String userName;
+    @Id
+    @Column(name = "id")
+    private Long Id;
+    @Column(name = "username")
+    private String userName;
 }
